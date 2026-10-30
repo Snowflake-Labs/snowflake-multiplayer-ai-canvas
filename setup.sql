@@ -12,6 +12,7 @@
 --     AGENTS.TPCH_REV_SV         Semantic view over TPC-H sample data
 --     AGENTS.CANVAS_AGENT        Cortex Agent with five tools
 --   SNOWFLAKE_DOCUMENTATION    Installed from Marketplace listing GZSTZ67BY9OQ4
+--   SNOWFLAKE_SAMPLE_DATA      Mounted from the sample data share if missing
 --
 -- After this runs:
 --   snow app deploy
@@ -74,7 +75,10 @@ CREATE TABLE IF NOT EXISTS AGENT_CANVAS.PUBLIC.CANVAS_CONTEXT (
 -- Free Cortex Knowledge Extension published by Snowflake. If you already have
 -- the SNOWFLAKE_DOCUMENTATION database installed, this block is a no-op.
 -- Run as a human user (TYPE=PERSON); SERVICE users can't request listings.
+-- Accepting the listing terms is required before CREATE DATABASE FROM LISTING
+-- on accounts that have never installed it; re-running is a no-op.
 -- -----------------------------------------------------------------------------
+CALL SYSTEM$ACCEPT_LEGAL_TERMS('DATA_EXCHANGE_LISTING', 'GZSTZ67BY9OQ4');
 CALL SYSTEM$REQUEST_LISTING_AND_WAIT('GZSTZ67BY9OQ4');
 CREATE DATABASE IF NOT EXISTS SNOWFLAKE_DOCUMENTATION
   FROM LISTING 'GZSTZ67BY9OQ4';
@@ -82,11 +86,16 @@ CREATE DATABASE IF NOT EXISTS SNOWFLAKE_DOCUMENTATION
 -- -----------------------------------------------------------------------------
 -- 4. Semantic view over TPC-H sample data
 -- -----------------------------------------------------------------------------
--- SNOWFLAKE_SAMPLE_DATA.TPCH_SF1 is auto-provisioned in every Snowflake
--- account. This semantic view wraps CUSTOMER, ORDERS, LINEITEM, NATION, and
+-- SNOWFLAKE_SAMPLE_DATA.TPCH_SF1 is auto-provisioned in most Snowflake
+-- accounts, but some (e.g. trial, lab, or org-created accounts) don't have it
+-- mounted. Create it from the sample data share if missing; no-op otherwise.
+-- This semantic view wraps CUSTOMER, ORDERS, LINEITEM, NATION, and
 -- REGION with named dimensions and metrics so Cortex Analyst can route
 -- natural-language questions into deterministic SQL.
 -- -----------------------------------------------------------------------------
+CREATE DATABASE IF NOT EXISTS SNOWFLAKE_SAMPLE_DATA
+  FROM SHARE SFC_SAMPLES.SAMPLE_DATA;
+
 CREATE OR REPLACE SEMANTIC VIEW AGENT_CANVAS.AGENTS.TPCH_REV_SV
 
   TABLES (
