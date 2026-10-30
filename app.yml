@@ -1,0 +1,41 @@
+version: 2
+
+name: AGENT_CANVAS_APP
+database: AGENT_CANVAS
+schema: PUBLIC
+query_warehouse: AGENT_CANVAS_WH
+
+label: Multiplayer AI canvas
+description: Shared chat with a Cortex Agent over TPC-H revenue data (caller rights).
+
+ignore:
+  - node_modules
+  - .next
+  - .git
+  - .env*
+  - "**/.DS_Store"
+  - server.js
+
+install:
+  commands:
+    # --include=dev because Tailwind v4 and TS compiler are devDeps that the
+    # production build still needs. The remote builder sets NODE_ENV=production.
+    - [npm, ci, --include=dev]
+
+build:
+  commands:
+    - [npm, run, build]
+    # Next.js standalone output: copy static + public into the standalone dir.
+    # public/ copy uses sh -c with a guard so an empty public/ doesn't fail.
+    - [cp, -r, .next/static, .next/standalone/.next/static]
+    - [sh, -c, "if [ -d public ] && [ \"$(ls -A public)\" ]; then cp -r public .next/standalone/public; fi"]
+    - [rm, -rf, node_modules]
+
+run:
+  command: [node, .next/standalone/server.js]
+
+auto_resume: true
+auto_suspend_secs: 900
+
+min_instances: 1
+max_instances: 1

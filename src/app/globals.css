@@ -1,0 +1,354 @@
+@import "tailwindcss";
+
+/**
+ * Snowflake-branded design system for the multiplayer canvas.
+ *
+ * Three layers:
+ *   1. Brand palette      — concrete Snowflake colors
+ *   2. Semantic tokens    — surface, border, text, accent abstractions
+ *   3. Component defaults — baseline body/typography
+ *
+ * Dark mode is a one-swap of the semantic layer; not wired here.
+ */
+
+@theme {
+  /* --- Brand palette --- */
+  --color-snow-50:  #EBF8FD;
+  --color-snow-100: #D1EEFA;
+  --color-snow-200: #A3DDF4;
+  --color-snow-300: #74CBEF;
+  --color-snow-400: #45BAE9;
+  --color-snow-500: #29B5E8;
+  --color-snow-600: #1E8CB3;
+  --color-snow-700: #166A89;
+  --color-snow-800: #11567F;
+  --color-snow-900: #0B3A58;
+
+  --color-ink-0:    #FFFFFF;
+  --color-ink-25:   #FBFCFE;
+  --color-ink-50:   #F6F8FB;
+  --color-ink-100:  #ECEFF4;
+  --color-ink-200:  #DBE1EA;
+  --color-ink-300:  #C2CBD8;
+  --color-ink-400:  #99A3B2;
+  --color-ink-500:  #6C7786;
+  --color-ink-600:  #4A5362;
+  --color-ink-700:  #2F3744;
+  --color-ink-800:  #1A212C;
+  --color-ink-900:  #0B1016;
+
+  --color-success-500: #1F9D55;
+  --color-warn-500:    #B45309;
+  --color-danger-500:  #B91C1C;
+
+  /* --- State surface tokens (used by Pill, NoticeBanner, ChartCard) --- */
+  --color-success-surface: #ECFDF5;
+  --color-success-text:    #065F46;
+  --color-success-border:  #A7F3D0;
+  --color-warn-surface:    #FFFBEB;
+  --color-warn-text:       #78350F;
+  --color-warn-border:     #FDE68A;
+  --color-danger-surface:  #FEF2F2;
+  --color-danger-text:     #7F1D1D;
+  --color-danger-border:   #FECACA;
+  --color-danger-hover:    #991B1B;
+
+  /* --- Semantic layer --- */
+  --color-surface-base:    var(--color-ink-50);
+  --color-surface-raised:  var(--color-ink-0);
+  --color-surface-overlay: var(--color-ink-25);
+  --color-surface-sunken:  var(--color-ink-100);
+
+  --color-border-subtle:   var(--color-ink-200);
+  --color-border-strong:   var(--color-ink-300);
+
+  --color-text-primary:    var(--color-ink-900);
+  --color-text-secondary:  var(--color-ink-600);
+  --color-text-muted:      var(--color-ink-500);
+  --color-text-inverse:    var(--color-ink-0);
+
+  --color-accent:          var(--color-snow-500);
+  --color-accent-hover:    var(--color-snow-600);
+  --color-accent-fg:       var(--color-ink-0);
+  --color-accent-subtle:   var(--color-snow-50);
+  --color-accent-emphasis: var(--color-snow-800);
+  --color-accent-surface-border: var(--color-snow-200);
+
+  --color-navy:            var(--color-snow-800);
+  --color-navy-strong:     var(--color-snow-900);
+
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", "Inter", sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Monaco, Consolas, monospace;
+
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+
+  --shadow-flat: 0 0 0 1px var(--color-border-subtle);
+  --shadow-raised: 0 1px 2px rgba(11, 16, 22, 0.04), 0 2px 8px rgba(11, 16, 22, 0.04);
+  --shadow-overlay: 0 4px 24px rgba(11, 16, 22, 0.08), 0 1px 3px rgba(11, 16, 22, 0.06);
+}
+
+/* --- Dark theme: overrides only the semantic + state-surface layers.
+ *     Brand (snow) palette stays constant. --- */
+[data-theme="dark"] {
+  color-scheme: dark;
+
+  --color-surface-base:    var(--color-ink-900);
+  --color-surface-raised:  var(--color-ink-800);
+  --color-surface-overlay: var(--color-ink-700);
+  --color-surface-sunken:  #060A10;
+
+  --color-border-subtle:   var(--color-ink-700);
+  --color-border-strong:   var(--color-ink-600);
+
+  --color-text-primary:    var(--color-ink-25);
+  --color-text-secondary:  var(--color-ink-300);
+  --color-text-muted:      var(--color-ink-400);
+  --color-text-inverse:    var(--color-ink-900);
+
+  --color-accent-subtle:   #0B2432;
+  --color-accent-emphasis: var(--color-snow-200);
+  --color-accent-surface-border: var(--color-snow-700);
+
+  --color-success-surface: #052E1F;
+  --color-success-text:    #6EE7B7;
+  --color-success-border:  #065F46;
+  --color-warn-surface:    #2E1B04;
+  --color-warn-text:       #FBBF24;
+  --color-warn-border:     #78350F;
+  --color-danger-surface:  #2A0A0A;
+  --color-danger-text:     #FCA5A5;
+  --color-danger-border:   #7F1D1D;
+  --color-danger-hover:    #DC2626;
+
+  --shadow-flat: 0 0 0 1px var(--color-border-subtle);
+  --shadow-raised: 0 1px 2px rgba(0, 0, 0, 0.5), 0 2px 8px rgba(0, 0, 0, 0.35);
+  --shadow-overlay: 0 4px 24px rgba(0, 0, 0, 0.6), 0 1px 3px rgba(0, 0, 0, 0.4);
+}
+
+/* --- Halloween theme: hidden easter egg reached via the konami sequence.
+ *     Pumpkin + midnight-purple palette. Still accessible (AA contrast). --- */
+[data-theme="halloween"] {
+  color-scheme: dark;
+
+  --color-surface-base:    #1A0B2E;
+  --color-surface-raised:  #2A1246;
+  --color-surface-overlay: #3C1B5E;
+  --color-surface-sunken:  #0E0520;
+
+  --color-border-subtle:   #4A2066;
+  --color-border-strong:   #6B2E8E;
+
+  --color-text-primary:    #FFF4E6;
+  --color-text-secondary:  #E6D5C3;
+  --color-text-muted:      #B59FBF;
+  --color-text-inverse:    #1A0B2E;
+
+  --color-accent:          #FF7518;
+  --color-accent-hover:    #FF9340;
+  --color-accent-fg:       #1A0B2E;
+  --color-accent-subtle:   #4A2066;
+  --color-accent-emphasis: #FFB380;
+  --color-accent-surface-border: #FF7518;
+
+  --color-success-surface: #0F2E1A;
+  --color-success-text:    #8CD9A3;
+  --color-success-border:  #1F6B3A;
+  --color-warn-surface:    #3C1B04;
+  --color-warn-text:       #FFC266;
+  --color-warn-border:     #7A4A14;
+  --color-danger-surface:  #3A0A14;
+  --color-danger-text:     #FF9CB0;
+  --color-danger-border:   #8E1A33;
+  --color-danger-hover:    #D13A5A;
+
+  --shadow-flat: 0 0 0 1px var(--color-border-subtle);
+  --shadow-raised: 0 1px 2px rgba(0, 0, 0, 0.6), 0 2px 12px rgba(255, 117, 24, 0.15);
+  --shadow-overlay: 0 4px 24px rgba(0, 0, 0, 0.7), 0 0 20px rgba(255, 117, 24, 0.2);
+}
+
+/* highlight.js colors in halloween match the dark theme (readable on purple). */
+[data-theme="halloween"] .hljs {
+  color: #FFF4E6;
+  background: #0E0520;
+}
+[data-theme="halloween"] .hljs-comment,
+[data-theme="halloween"] .hljs-quote { color: #B59FBF; }
+[data-theme="halloween"] .hljs-keyword,
+[data-theme="halloween"] .hljs-selector-tag,
+[data-theme="halloween"] .hljs-literal,
+[data-theme="halloween"] .hljs-type,
+[data-theme="halloween"] .hljs-addition { color: #FF7518; }
+[data-theme="halloween"] .hljs-number,
+[data-theme="halloween"] .hljs-title,
+[data-theme="halloween"] .hljs-section,
+[data-theme="halloween"] .hljs-built_in,
+[data-theme="halloween"] .hljs-tag,
+[data-theme="halloween"] .hljs-name { color: #FFB380; }
+[data-theme="halloween"] .hljs-string,
+[data-theme="halloween"] .hljs-regexp,
+[data-theme="halloween"] .hljs-symbol { color: #FFC266; }
+
+/* Halloween egg: one-time center flash when the mode toggles on. */
+@keyframes canvas-halloween-flash {
+  0%   { opacity: 0; transform: translate(-50%, -50%) scale(0.6); }
+  20%  { opacity: 1; transform: translate(-50%, -50%) scale(1.15); }
+  60%  { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  100% { opacity: 0; transform: translate(-50%, -50%) scale(1.4); }
+}
+.canvas-halloween-flash {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  z-index: 9999;
+  font-size: 7rem;
+  pointer-events: none;
+  animation: canvas-halloween-flash 1.6s ease-out forwards;
+  filter: drop-shadow(0 0 24px rgba(255, 117, 24, 0.6));
+}
+
+/* --- highlight.js: light theme comes from the github.css import in
+ *     Markdown.tsx; dark theme overrides below. --- */
+[data-theme="dark"] .hljs {
+  color: #c9d1d9;
+  background: #0d1117;
+}
+[data-theme="dark"] .hljs-comment,
+[data-theme="dark"] .hljs-quote { color: #8b949e; }
+[data-theme="dark"] .hljs-keyword,
+[data-theme="dark"] .hljs-selector-tag,
+[data-theme="dark"] .hljs-literal,
+[data-theme="dark"] .hljs-type,
+[data-theme="dark"] .hljs-addition { color: #ff7b72; }
+[data-theme="dark"] .hljs-number,
+[data-theme="dark"] .hljs-selector-attr,
+[data-theme="dark"] .hljs-selector-pseudo,
+[data-theme="dark"] .hljs-meta .hljs-meta-keyword,
+[data-theme="dark"] .hljs-doctag,
+[data-theme="dark"] .hljs-title,
+[data-theme="dark"] .hljs-section,
+[data-theme="dark"] .hljs-built_in,
+[data-theme="dark"] .hljs-tag,
+[data-theme="dark"] .hljs-name { color: #d2a8ff; }
+[data-theme="dark"] .hljs-attribute,
+[data-theme="dark"] .hljs-attr,
+[data-theme="dark"] .hljs-variable,
+[data-theme="dark"] .hljs-template-variable,
+[data-theme="dark"] .hljs-class .hljs-title,
+[data-theme="dark"] .hljs-type { color: #79c0ff; }
+[data-theme="dark"] .hljs-string,
+[data-theme="dark"] .hljs-regexp,
+[data-theme="dark"] .hljs-symbol { color: #a5d6ff; }
+[data-theme="dark"] .hljs-deletion { color: #ffa198; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--color-surface-base);
+  color: var(--color-text-primary);
+  font-family: var(--font-sans);
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Markdown prose defaults inside agent messages */
+.prose-canvas h1, .prose-canvas h2, .prose-canvas h3 {
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin: 1.1em 0 0.5em;
+  line-height: 1.3;
+}
+.prose-canvas h1 { font-size: 1.25rem; }
+.prose-canvas h2 { font-size: 1.1rem; }
+.prose-canvas h3 { font-size: 1rem; }
+.prose-canvas p  { margin: 0.5em 0; line-height: 1.6; }
+.prose-canvas ul, .prose-canvas ol { margin: 0.5em 0; padding-left: 1.25em; }
+.prose-canvas li { margin: 0.25em 0; line-height: 1.55; }
+.prose-canvas strong { font-weight: 600; color: var(--color-text-primary); }
+.prose-canvas em { font-style: italic; }
+.prose-canvas a { color: var(--color-accent); text-decoration: underline; text-underline-offset: 2px; }
+.prose-canvas code {
+  font-family: var(--font-mono);
+  font-size: 0.875em;
+  background: var(--color-surface-sunken);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: 4px;
+  padding: 0.1em 0.35em;
+}
+.prose-canvas pre {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  background: var(--color-ink-900);
+  color: var(--color-ink-100);
+  border-radius: var(--radius-md);
+  padding: 0.9rem 1rem;
+  overflow-x: auto;
+  margin: 0.75em 0;
+}
+.prose-canvas pre code {
+  background: transparent;
+  border: 0;
+  padding: 0;
+  color: inherit;
+  font-size: inherit;
+}
+.prose-canvas blockquote {
+  border-left: 3px solid var(--color-border-strong);
+  padding-left: 0.9em;
+  color: var(--color-text-secondary);
+  margin: 0.6em 0;
+}
+.prose-canvas table {
+  border-collapse: collapse;
+  margin: 0.75em 0;
+  font-size: 0.9rem;
+  width: 100%;
+}
+.prose-canvas th, .prose-canvas td {
+  border: 1px solid var(--color-border-subtle);
+  padding: 0.4em 0.7em;
+  text-align: left;
+}
+.prose-canvas th {
+  background: var(--color-surface-sunken);
+  font-weight: 600;
+}
+
+/* Streaming cursor */
+@keyframes canvas-pulse {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.35; }
+}
+.canvas-stream-cursor {
+  display: inline-block;
+  width: 7px;
+  height: 1.1em;
+  margin-left: 2px;
+  vertical-align: text-bottom;
+  background: var(--color-accent);
+  animation: canvas-pulse 1.1s ease-in-out infinite;
+  border-radius: 1px;
+}
+
+/* Pulsing status dot used in the connection pill */
+@keyframes canvas-pulse-dot {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50%      { transform: scale(1.35); opacity: 0.55; }
+}
+.canvas-pulse-dot {
+  animation: canvas-pulse-dot 1.4s ease-in-out infinite;
+  transform-origin: center;
+}
+
+/* Scrollbars (subtle) */
+.scroll-pane::-webkit-scrollbar { width: 10px; height: 10px; }
+.scroll-pane::-webkit-scrollbar-track { background: transparent; }
+.scroll-pane::-webkit-scrollbar-thumb {
+  background: var(--color-ink-200);
+  border-radius: 10px;
+  border: 2px solid var(--color-surface-base);
+}
+.scroll-pane::-webkit-scrollbar-thumb:hover { background: var(--color-ink-300); }
