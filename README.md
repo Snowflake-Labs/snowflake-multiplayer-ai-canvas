@@ -1,5 +1,7 @@
 # Agent Canvas: Multiplayer AI in Snowflake
 
+![Agent Canvas with two teammates in one session: one asks Gil about revenue, and Gil answers with a Cortex Analyst query and a bar chart of net revenue by order year.](assets/agent_canvas.png)
+
 A data team and a Cortex Agent (named Gil) in the same canvas, sharing a single agent session, in real time – **all in Snowflake right next to the data.** Everyone in the canvas can see every message written by teammates or the agent, every tool call, every chart. Mention `@Gil` to bring the agent into the thread. Type `/file` to capture durable context the team can revisit across new sessions.
 
 ## Prerequisites
